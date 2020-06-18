@@ -1,0 +1,19 @@
+name: lognito
+description: Lognito, universal extendible logging library
+version: 0.0.1
+author: Vladimir Zahradnik
+homepage: https://github.com/4brains/lognito
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  intl: ^0.16.1
+  http: 0.12.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
