@@ -9,6 +9,7 @@ final infoEvent = LogEvent(Level.info, 'info', null, null, 'Logger');
 final warningEvent = LogEvent(Level.warning, 'warning', null, null, 'Logger');
 final debugEvent = LogEvent(Level.debug, 'debug', null, null, 'Logger');
 final errorEvent = LogEvent(Level.error, 'error', null, null, 'Logger');
+final specialEvent = LogEvent(Level.special, 'error', null, null, 'Logger');
 
 final listEvent =
     LogEvent(Level.info, ['first item', 'second item'], null, null, 'Logger');
@@ -52,7 +53,8 @@ void main() {
           equals([
             '\x1B[38;5;12m[I]\x1B[0m TIME: $now ["first item","second item"]'
           ]));
-      expect(formatter.format(mapEvent),
+      expect(
+          formatter.format(mapEvent),
           equals([
             '\x1B[38;5;12m[I]\x1B[0m TIME: $now {"first":"first","second":"second"}'
           ]));
@@ -131,6 +133,25 @@ void main() {
             '\x1B[38;5;12m│ 💡   "second": "second"\x1B[0m',
             '\x1B[38;5;12m│ 💡 }\x1B[0m',
             '\x1B[38;5;12m└─────────────────────────────────────────────────\x1B[0m'
+          ]));
+    });
+    test('expect pretty formatted messages with stackTrace', () {
+      final formatter = PrettyFormatter(methodCount: 1, lineLength: 50);
+      expect(
+          formatter.format(infoEvent),
+          equals([
+            '\x1B[38;5;12m┌─────────────────────────────────────────────────\x1B[0m',
+            '\x1B[38;5;12m│ #0   PrettyFormatter.format (package:lognito/src/formatter/pretty_formatter.dart:105:56)',
+            '\x1B[38;5;12m├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄\x1B[0m',
+            '\x1B[38;5;12m│ 💡 info\x1B[0m',
+            '\x1B[38;5;12m└─────────────────────────────────────────────────\x1B[0m'
+          ]));
+      expect(
+          formatter.format(specialEvent),
+          equals([
+            '\x1B[38;5;100m┌─────────────────────────────────────────────────\x1B[0m',
+            '\x1B[38;5;100m│ error\x1B[0m',
+            '\x1B[38;5;100m└─────────────────────────────────────────────────\x1B[0m'
           ]));
     });
   });

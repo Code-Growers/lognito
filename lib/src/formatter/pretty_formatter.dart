@@ -25,6 +25,7 @@ const levelColors = {
   Level.info: AnsiColor.fg(12),
   Level.warning: AnsiColor.fg(208),
   Level.error: AnsiColor.fg(196),
+  Level.special: AnsiColor.fg(100),
 };
 
 const levelEmojis = {
@@ -32,6 +33,7 @@ const levelEmojis = {
   Level.info: '💡 ',
   Level.warning: '⚠️ ',
   Level.error: '⛔ ',
+  Level.special: '',
 };
 
 /// Matches a stacktrace line as generated on Android/iOS devices.
@@ -97,12 +99,14 @@ class PrettyFormatter extends Formatter {
     var messageStr = _stringifyMessage(event.message);
 
     String stackTraceStr;
-    if (event.stackTrace == null) {
-      if (methodCount > 0) {
-        stackTraceStr = _formatStackTrace(StackTrace.current, methodCount);
+    if (event.level != Level.special) {
+      if (event.stackTrace == null) {
+        if (methodCount > 0) {
+          stackTraceStr = _formatStackTrace(StackTrace.current, methodCount);
+        }
+      } else if (errorMethodCount > 0) {
+        stackTraceStr = _formatStackTrace(event.stackTrace, errorMethodCount);
       }
-    } else if (errorMethodCount > 0) {
-      stackTraceStr = _formatStackTrace(event.stackTrace, errorMethodCount);
     }
 
     var errorStr = event.error?.toString();
@@ -214,11 +218,13 @@ class PrettyFormatter extends Formatter {
     }
   }
 
-  List<String> _formatAndPrint(Level level,
-      String message,
-      String time,
-      String error,
-      String stacktrace,) {
+  List<String> _formatAndPrint(
+    Level level,
+    String message,
+    String time,
+    String error,
+    String stacktrace,
+  ) {
     // This code is non trivial and a type annotation here helps understanding.
     List<String> buffer = [];
     var color = _getLevelColor(level);

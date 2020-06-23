@@ -16,7 +16,7 @@ enum Level {
   error,
 
   // Special level, doesn't include stacktrace
-  bloc,
+  special,
 }
 
 /// Use instances of logger to send log messages to the [Client].
@@ -118,14 +118,14 @@ class Lognito {
     log(Level.error, message, error, stackTrace);
   }
 
-  /// Special log for bloc events [Level.bloc].
-  void bl(dynamic message) {
-    log(Level.bloc, message);
+  /// Special log for bloc events [Level.special].
+  void sp(dynamic message) {
+    log(Level.special, message);
   }
 
-  /// Special log for bloc events [Level.bloc].
-  void bloc(dynamic message) {
-    log(Level.bloc, message);
+  /// Special log for bloc events [Level.special].
+  void special(dynamic message) {
+    log(Level.special, message);
   }
 
   /// Log a message with [level].
@@ -137,7 +137,7 @@ class Lognito {
       throw ArgumentError('Error parameter cannot take a StackTrace!');
     }
     var logEvent = LogEvent(level, message, error, stackTrace, _label);
-    if (_filter.shouldLog(logEvent) || level == Level.bloc) {
+    if (_filter.shouldLog(logEvent) || level == Level.special) {
       _buffers.forEach((o) {
         o.addToBuffer(logEvent);
       });

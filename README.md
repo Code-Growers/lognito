@@ -21,8 +21,21 @@ logger.d("Logger is working!");
 You can pass any object and formatter will take care of formatting it to `String`. \
 But `PrettyFormatter` and `SimpleFormatter` can format only work with `String`,`List` and `Map`.
 
+## Motivation
+We create this library to create unified way to log all across platforms.\
+[Logger](https://pub.dev/packages/logger) library is great for small projects, but bigger projects need more complex and extendable way to log events.
+Lognito is base logging library, and we believe it will be the foundation for the biggest dart logging library.\
+By extending the `Output` class you can create clients for Lognito.
 
 ## Documentation
+
+### Levels
+There are 5 log levels that can be used.
+1. Debug
+2. Info 
+3. Warning
+4. Error
+5. Special - for special log events that need special handling
 
 ### Instances
 Lognito is based around singleton pattern, by first calling `Lognito.init()` you create the initial configuration,
