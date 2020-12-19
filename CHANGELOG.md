@@ -1,3 +1,7 @@
+## [0.0.3]
+
+* Upgraded http library
+
 ## [0.0.2]
 
 * Added code analysis with rules defined by [cg_analysis](https://github.com/NomiAdam/cg_analysis).

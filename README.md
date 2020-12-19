@@ -40,7 +40,7 @@ There are 5 log levels that can be used.
 ### Instances
 Lognito is based around singleton pattern, by first calling `Lognito.init()` you create the initial configuration,
 where you have to provide all the configuration.
-Then you can either call constructor `Lognito()` to get the same instance, or `Lognito.withLabel()` to create labeled instance.
+Then you can either call constructor `Lognito()` to get the same instance, or `Lognito.withLabel()` to create a labeled instance.
 This has the same configuration, but has label ten identifies it.
 
 Lognito is separated into three main layers.\
@@ -50,7 +50,7 @@ For every layer we provide few simple implementations, but every layer can be sw
 First layer.\
 Decides if event should go to buffers.
 
-`DevelopmentFilter` return true for event with higher or same level as defined by the constructor parameter.
+`DevelopmentFilter` return true for an event with higher or same level as defined by the constructor parameter.
 
 ### Buffers
 This is the main layer.\
