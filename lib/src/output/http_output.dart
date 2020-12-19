@@ -29,14 +29,15 @@ class HTTPOutput extends Output {
     this.formatter,
     this.headers,
     this.encoding,
-  }) : assert(formatter != null);
+  }) : assert(formatter != null,
+            'formatter param passed to HTTPOutput cannot be null!');
 
   @override
   void init() {}
 
   @override
   Future<bool> log(LogEvent event) async {
-    final response = await postMessage(formatter.format(event).first);
+    final http.Response response = await postMessage(formatter.format(event).first);
     if (response.statusCode == 200) {
       return true;
     }

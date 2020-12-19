@@ -10,9 +10,7 @@ class JsonFormatter extends Formatter {
   void dispose() {}
 
   @override
-  List<String> format(LogEvent event) {
-    return [json.encode(event.message)];
-  }
+  List<String> format(LogEvent event) => <String>[json.encode(event.message)];
 
   @override
   void init() {}

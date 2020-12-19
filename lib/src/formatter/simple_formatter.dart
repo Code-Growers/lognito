@@ -6,6 +6,8 @@ import 'package:lognito/src/event/log_event.dart';
 import 'package:lognito/src/formatter/formater.dart';
 import 'package:lognito/src/lognito.dart';
 
+import '../../lognito.dart';
+
 /// Credit to https://github.com/leisim/logger
 
 /// Outputs simple log messages:
@@ -13,14 +15,14 @@ import 'package:lognito/src/lognito.dart';
 /// [E] Log message  ERROR: Error info
 /// ```
 class SimpleFormatter extends Formatter {
-  static final levelPrefixes = {
+  static final Map<Level, String> levelPrefixes = <Level, String>{
     Level.debug: '[D]',
     Level.info: '[I]',
     Level.warning: '[W]',
     Level.error: '[E]',
   };
 
-  static final levelColors = {
+  static final Map<Level, AnsiColor> levelColors = <Level, AnsiColor>{
     Level.debug: AnsiColor.none(),
     Level.info: AnsiColor.fg(12),
     Level.warning: AnsiColor.fg(208),
@@ -41,24 +43,25 @@ class SimpleFormatter extends Formatter {
 
   @override
   List<String> format(LogEvent event) {
-    var messageStr = _stringifyMessage(event.message);
-    var errorStr = event.error != null ? '  ERROR: ${event.error}' : '';
-    var timeStr = printTime ? 'TIME: ${dateFormat.format(DateTime.now())}' : '';
-    return [
+    String messageStr = _stringifyMessage(event.message);
+    String errorStr = event.error != null ? '  ERROR: ${event.error}' : '';
+    String timeStr =
+        printTime ? 'TIME: ${dateFormat.format(DateTime.now())}' : '';
+    return <String>[
       '${_labelFor(event.level)} ${printLoggerLabel ? event.loggerLabel : ''}$timeStr $messageStr$errorStr'
     ];
   }
 
   String _labelFor(Level level) {
-    var prefix = levelPrefixes[level];
-    var color = levelColors[level];
+    String prefix = levelPrefixes[level];
+    AnsiColor color = levelColors[level];
 
     return colors ? color(prefix) : prefix;
   }
 
   String _stringifyMessage(dynamic message) {
     if (message is Map || message is Iterable) {
-      var encoder = JsonEncoder.withIndent(null);
+      JsonEncoder encoder = JsonEncoder.withIndent(null);
       return encoder.convert(message);
     } else {
       return message.toString();

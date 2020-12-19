@@ -12,7 +12,7 @@ class LevelDelayedBuffer extends RepeatingBuffer {
       : super(outputs);
 
   void addToBuffer(LogEvent event) {
-    final mappedEvents = {for (var output in outputs) output: event};
+    final Map<Output, LogEvent> mappedEvents = {for (Output output in outputs) output: event};
     pendingEvents.add(mappedEvents);
     if (getLevelInt(event.level) >= getLevelInt(triggerLevel)) {
       super.flush();

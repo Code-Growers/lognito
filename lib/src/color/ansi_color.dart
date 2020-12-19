@@ -3,10 +3,10 @@
 /// This class handles colorizing of terminal output.
 class AnsiColor {
   /// ANSI Control Sequence Introducer, signals the terminal for new settings.
-  static const ansiEsc = '\x1B[';
+  static const String ansiEsc = '\x1B[';
 
   /// Reset all colors and options for current SGRs to terminal defaults.
-  static const ansiDefault = '${ansiEsc}0m';
+  static const String ansiDefault = '${ansiEsc}0m';
 
   final int fg;
   final int bg;

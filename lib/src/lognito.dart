@@ -25,8 +25,12 @@ class Lognito {
   ///
   /// All logs with levels below this level will be omitted.
 
-  static final _defaultOutputs = [ConsoleOutput(formatter: PrettyFormatter())];
-  static final _defaultBuffer = [RepeatingBuffer(_defaultOutputs)];
+  static final List<ConsoleOutput> _defaultOutputs = <ConsoleOutput>[
+    ConsoleOutput(formatter: PrettyFormatter())
+  ];
+  static final List<RepeatingBuffer> _defaultBuffer = <RepeatingBuffer>[
+    RepeatingBuffer(_defaultOutputs)
+  ];
   static Lognito _singleton;
   final Filter _filter;
   final List<Buffer> _buffers;
@@ -48,9 +52,9 @@ class Lognito {
   }) {
     assert(buffer == null || buffers == null,
         'Use one of parameters, either one buffer, or list of buffers');
-    final singleton = Lognito._internal(
+    final Lognito singleton = Lognito._internal(
         filter ?? DevelopmentFilter(level ?? Level.debug),
-        buffer != null ? [buffer] : (buffers ?? _defaultBuffer),
+        buffer != null ? <Buffer>[buffer] : (buffers ?? _defaultBuffer),
         label ?? 'Root logger');
     _singleton = singleton;
     return singleton;
@@ -58,7 +62,7 @@ class Lognito {
 
   Lognito._internal(this._filter, this._buffers, this._label) {
     _filter.init();
-    _buffers.map((o) => o.init());
+    _buffers.map((Buffer buffer) => buffer.init());
   }
 
   /// Create new instance of Lognito with custom label and log [Level],
@@ -136,23 +140,23 @@ class Lognito {
     } else if (error != null && error is StackTrace) {
       throw ArgumentError('Error parameter cannot take a StackTrace!');
     }
-    var logEvent = LogEvent(level, message, error, stackTrace, _label);
+    LogEvent logEvent = LogEvent(level, message, error, stackTrace, _label);
     if (_filter.shouldLog(logEvent) || level == Level.special) {
-      _buffers.forEach((o) {
-        o.addToBuffer(logEvent);
+      _buffers.forEach((Buffer buffer) {
+        buffer.addToBuffer(logEvent);
       });
     }
   }
 
   List<Future<void>> flush() {
-    return _buffers?.map((o) => o.flush());
+    return _buffers?.map((Buffer buffer) => buffer.flush());
   }
 
   /// Closes the logger and releases all resources.
   void close() {
     _active = false;
     _filter.dispose();
-    _buffers?.map((o) => o.dispose());
+    _buffers?.map((Buffer buffer) => buffer.dispose());
   }
 
   bool operator ==(Object object) {
@@ -161,7 +165,8 @@ class Lognito {
         return !this
             ._buffers
             .asMap()
-            .map((key, value) => MapEntry(key, object._buffers[key] == value))
+            .map((int key, Buffer value) =>
+                MapEntry<int, bool>(key, object._buffers[key] == value))
             .values
             .toList()
             .contains(false);

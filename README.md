@@ -1,6 +1,6 @@
 # Lognito
 
-Ultimate logging library.
+Ultimate logging library approved by Code Growers s.r.o.
 
 Lognito is the last logging library for dart you need.
 Lognito manages to do everything from simple logs to beautiful async logging.

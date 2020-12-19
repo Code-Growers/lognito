@@ -3,7 +3,7 @@ import 'package:lognito/src/event/log_event.dart';
 import 'package:lognito/src/output/output.dart';
 
 class RepeatingBuffer extends Buffer {
-  List<Map<Output, LogEvent>> pendingEvents = [];
+  List<Map<Output, LogEvent>> pendingEvents = <Map<Output, LogEvent>>[];
   final Duration repeatAfter;
 
   RepeatingBuffer(List<Output> outputs,
@@ -12,7 +12,9 @@ class RepeatingBuffer extends Buffer {
 
   @override
   void addToBuffer(LogEvent event) {
-    final mappedEvents = {for (var output in outputs) output: event};
+    final Map<Output, LogEvent> mappedEvents = <Output, LogEvent>{
+      for (Output output in outputs) output: event
+    };
     pendingEvents.add(mappedEvents);
     flush();
   }
@@ -20,23 +22,25 @@ class RepeatingBuffer extends Buffer {
   @override
   Future<void> flush() async {
     final List<Map<Output, LogEvent>> currentEvents = pendingEvents;
-    pendingEvents = [];
-    final remaining = await Future.wait(currentEvents.map((pendingEvent) {
-      return Future.wait(Map.of(pendingEvent)
-          .map((output, event) {
-            return MapEntry(output, Future.sync(() => output.log(event)));
+    pendingEvents = <Map<Output, LogEvent>>[];
+    final List<List<bool>> remaining = await Future.wait(
+        currentEvents.map((Map<Output, LogEvent> pendingEvent) {
+      return Future.wait(Map<Output, LogEvent>.of(pendingEvent)
+          .map((Output output, LogEvent event) {
+            return MapEntry<Output, Future<bool>>(
+                output, Future<bool>.sync(() => output.log(event)));
           })
           .values
           .toList());
     }));
-    final remainingEvents = currentEvents
-      ..removeWhere((pendingEvent) {
-        final index = currentEvents.indexOf(pendingEvent);
-        return remaining[index].every((e) => e);
+    final List<Map<Output, LogEvent>> remainingEvents = currentEvents
+      ..removeWhere((Map<Output, LogEvent> pendingEvent) {
+        final int index = currentEvents.indexOf(pendingEvent);
+        return remaining[index].every((bool e) => e);
       });
     pendingEvents.addAll(remainingEvents);
     if (currentEvents.isNotEmpty) {
-      Future.delayed(repeatAfter).then((_) {
+      Future<void>.delayed(repeatAfter).then((_) {
         flush();
       });
     }
