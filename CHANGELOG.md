@@ -1,3 +1,7 @@
+## [0.0.4]
+
+* Upgraded http library
+
 ## [0.0.3]
 
 * Upgraded http library

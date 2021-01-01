@@ -11,7 +11,7 @@ void main() {
 }
 
 // Init the Lognito
-final lognito = Lognito.init(
+final Lognito lognito = Lognito.init(
     buffer: FilteredBuffer([ConsoleOutput(formatter: PrettyFormatter())],
         filter: DevelopmentFilter(Level.info)));
 
@@ -19,7 +19,7 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: (context, _) => Scaffold(
+      builder: (BuildContext context, _) => Scaffold(
         body: SafeArea(
           child: Center(
             child: Column(
