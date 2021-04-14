@@ -1,6 +1,7 @@
 ## [0.0.5]
 
 * Upgraded intl library
+* Upgraded http library
 
 ## [0.0.4]
 
