@@ -4,7 +4,7 @@ import 'package:lognito/src/lognito.dart';
 import 'package:lognito/src/utils/level_utils.dart';
 
 class DevelopmentFilter extends Filter {
-  final Level level;
+  final Level? level;
 
   DevelopmentFilter(this.level);
 
@@ -20,7 +20,7 @@ class DevelopmentFilter extends Filter {
   }
 
   @override
-  Filter copyWithLevel(Level level) {
+  Filter copyWithLevel(Level? level) {
     return DevelopmentFilter(level);
   }
 }

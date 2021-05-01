@@ -6,8 +6,6 @@ import 'package:lognito/src/event/log_event.dart';
 import 'package:lognito/src/formatter/formater.dart';
 import 'package:lognito/src/lognito.dart';
 
-import '../../lognito.dart';
-
 /// Credit to https://github.com/leisim/logger
 
 /// Outputs simple log messages:
@@ -38,7 +36,7 @@ class SimpleFormatter extends Formatter {
     this.printTime = false,
     this.colors = true,
     this.printLoggerLabel = false,
-    DateFormat dateFormat,
+    DateFormat? dateFormat,
   }) : this.dateFormat = dateFormat ?? DateFormat('dd.MM HH:mm');
 
   @override
@@ -52,11 +50,11 @@ class SimpleFormatter extends Formatter {
     ];
   }
 
-  String _labelFor(Level level) {
-    String prefix = levelPrefixes[level];
-    AnsiColor color = levelColors[level];
+  String? _labelFor(Level level) {
+    String? prefix = levelPrefixes[level];
+    AnsiColor? color = levelColors[level];
 
-    return colors ? color(prefix) : prefix;
+    return colors ? color!(prefix!) : prefix;
   }
 
   String _stringifyMessage(dynamic message) {

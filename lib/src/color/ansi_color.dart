@@ -8,8 +8,8 @@ class AnsiColor {
   /// Reset all colors and options for current SGRs to terminal defaults.
   static const String ansiDefault = '${ansiEsc}0m';
 
-  final int fg;
-  final int bg;
+  final int? fg;
+  final int? bg;
   final bool color;
 
   const AnsiColor.none()

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:lognito/src/event/log_event.dart';
 import 'package:lognito/src/formatter/formater.dart';
@@ -19,18 +18,17 @@ class HTTPOutput extends Output {
   final Uri uri;
 
   /// Optional http headers
-  final Map<String, String> headers;
+  final Map<String, String>? headers;
 
   /// Encoding of the final message
-  final Encoding encoding;
+  final Encoding? encoding;
 
   HTTPOutput({
-    @required this.uri,
-    this.formatter,
+    required this.uri,
+    required this.formatter,
     this.headers,
     this.encoding,
-  }) : assert(formatter != null,
-            'formatter param passed to HTTPOutput cannot be null!');
+  });
 
   @override
   void init() {}
@@ -46,7 +44,7 @@ class HTTPOutput extends Output {
 
   /// Send out the list of line (messages)
   /// [message] should be properly formatted for your use-case by formatter
-  Future<http.Response> postMessage(String message) {
+  Future<http.Response> postMessage(String? message) {
     return http.post(uri, headers: headers, body: message, encoding: encoding);
   }
 

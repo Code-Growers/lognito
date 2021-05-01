@@ -5,8 +5,6 @@ import 'package:lognito/src/event/log_event.dart';
 import 'package:lognito/src/formatter/formater.dart';
 import 'package:lognito/src/lognito.dart';
 
-import '../../lognito.dart';
-
 /// Credit to https://github.com/leisim/logger
 
 /// Default implementation of [Formatter].
@@ -62,7 +60,7 @@ class PrettyFormatter extends Formatter {
   final bool colors;
   final bool printEmojis;
   final bool printTime;
-  DateTime _startTime;
+  DateTime? _startTime;
 
   String _topBorder = '';
   String _middleBorder = '';
@@ -97,10 +95,10 @@ class PrettyFormatter extends Formatter {
   void dispose() {}
 
   @override
-  List<String> format(LogEvent event) {
+  List<String?> format(LogEvent event) {
     String messageStr = _stringifyMessage(event.message);
 
-    String stackTraceStr;
+    String? stackTraceStr;
     if (event.level != Level.special) {
       if (event.stackTrace == null) {
         if (methodCount > 0) {
@@ -111,9 +109,9 @@ class PrettyFormatter extends Formatter {
       }
     }
 
-    String errorStr = event.error?.toString();
+    String? errorStr = event.error?.toString();
 
-    String timeStr;
+    String? timeStr;
     if (printTime) {
       timeStr = _getTime();
     }
@@ -136,7 +134,7 @@ class PrettyFormatter extends Formatter {
     }
   }
 
-  AnsiColor _getLevelColor(Level level) {
+  AnsiColor? _getLevelColor(Level level) {
     if (colors) {
       return levelColors[level];
     } else {
@@ -146,13 +144,13 @@ class PrettyFormatter extends Formatter {
 
   AnsiColor _getErrorColor(Level level) {
     if (colors) {
-      return levelColors[Level.error].toBg();
+      return levelColors[Level.error]!.toBg();
     } else {
       return AnsiColor.none();
     }
   }
 
-  String _formatStackTrace(StackTrace stackTrace, int methodCount) {
+  String? _formatStackTrace(StackTrace? stackTrace, int methodCount) {
     List<String> lines = stackTrace.toString().split('\n');
     List<String> formatted = <String>[];
     int count = 0;
@@ -191,28 +189,28 @@ class PrettyFormatter extends Formatter {
     String min = _twoDigits(now.minute);
     String sec = _twoDigits(now.second);
     String ms = _threeDigits(now.millisecond);
-    String timeSinceStart = now.difference(_startTime).toString();
+    String timeSinceStart = now.difference(_startTime!).toString();
     return '$h:$min:$sec.$ms (+$timeSinceStart)';
   }
 
   bool _discardDeviceStacktraceLine(String line) {
-    Match match = _deviceStackTraceRegex.matchAsPrefix(line);
+    Match? match = _deviceStackTraceRegex.matchAsPrefix(line);
     if (match == null) {
       return false;
     }
-    return match.group(2).startsWith('package:logger');
+    return match.group(2)!.startsWith('package:logger');
   }
 
   bool _discardWebStacktraceLine(String line) {
-    Match match = _webStackTraceRegex.matchAsPrefix(line);
+    Match? match = _webStackTraceRegex.matchAsPrefix(line);
     if (match == null) {
       return false;
     }
-    return match.group(1).startsWith('packages/logger') ||
-        match.group(1).startsWith('dart-sdk/lib');
+    return match.group(1)!.startsWith('packages/logger') ||
+        match.group(1)!.startsWith('dart-sdk/lib');
   }
 
-  String _getEmoji(Level level) {
+  String? _getEmoji(Level level) {
     if (printEmojis) {
       return levelEmojis[level];
     } else {
@@ -220,16 +218,16 @@ class PrettyFormatter extends Formatter {
     }
   }
 
-  List<String> _formatAndPrint(
+  List<String?> _formatAndPrint(
     Level level,
     String message,
-    String time,
-    String error,
-    String stacktrace,
+    String? time,
+    String? error,
+    String? stacktrace,
   ) {
     // This code is non trivial and a type annotation here helps understanding.
-    List<String> buffer = <String>[];
-    AnsiColor color = _getLevelColor(level);
+    List<String?> buffer = <String?>[];
+    AnsiColor color = _getLevelColor(level)!;
     buffer.add(color(_topBorder));
 
     if (error != null) {
@@ -256,7 +254,7 @@ class PrettyFormatter extends Formatter {
       buffer..add(color('$verticalLine $time'))..add(color(_middleBorder));
     }
 
-    String emoji = _getEmoji(level);
+    String? emoji = _getEmoji(level);
     for (String line in message.split('\n')) {
       buffer.add(color('$verticalLine $emoji$line'));
     }

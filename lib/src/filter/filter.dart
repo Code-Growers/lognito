@@ -6,7 +6,7 @@ abstract class Filter {
   void init();
 
   /// Method used when creating new [Lognito] with different log level
-  Filter copyWithLevel(Level level);
+  Filter copyWithLevel(Level? level);
 
   /// Is called every time a new log message is sent and decides if
   /// it will be printed or canceled.

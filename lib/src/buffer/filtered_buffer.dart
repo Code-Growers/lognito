@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:lognito/src/buffer/simple_buffer.dart';
 import 'package:lognito/src/event/log_event.dart';
 import 'package:lognito/src/filter/filter.dart';
@@ -10,7 +9,7 @@ class FilteredBuffer extends SimpleBuffer {
   List<LogEvent> events = [];
   final Filter filter;
 
-  FilteredBuffer(List<Output> outputs, {@required this.filter})
+  FilteredBuffer(List<Output> outputs, {required this.filter})
       : super(outputs);
 
   @override

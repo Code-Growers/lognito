@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:lognito/src/event/log_event.dart';
 import 'package:lognito/src/formatter/formater.dart';
 import 'package:lognito/src/output/output.dart';
@@ -15,11 +14,11 @@ class FileOutput extends Output {
   final File file;
   final bool overrideExisting;
   final Encoding encoding;
-  IOSink _sink;
+  late IOSink _sink;
 
   FileOutput({
-    @required this.file,
-    @required this.formatter,
+    required this.file,
+    required this.formatter,
     this.overrideExisting = false,
     this.encoding = utf8,
   });
@@ -40,7 +39,7 @@ class FileOutput extends Output {
 
   @override
   FutureOr<bool> log(LogEvent event) {
-    final List<String> lines = formatter.format(event);
+    final List<String?> lines = formatter.format(event);
     try{
       _sink.writeAll(lines, '\n');
       return true;

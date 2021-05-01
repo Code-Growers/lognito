@@ -6,17 +6,15 @@ import 'package:lognito/src/output/output.dart';
 class DebugPrinterOutput extends Output {
   final Formatter formatter;
 
-  DebugPrinterOutput({@required this.formatter})
-      : assert(formatter != null,
-            'formatter param passed to DebugPrinterOutput cannot be null!');
+  DebugPrinterOutput({required this.formatter});
 
   @override
   void init() {}
 
   @override
   bool log(LogEvent event) {
-    final List<String> formattedMessage = formatter.format(event);
-    formattedMessage.forEach((String element) {
+    final List<String?> formattedMessage = formatter.format(event);
+    formattedMessage.forEach((String? element) {
       debugPrint(element);
     });
     return true;

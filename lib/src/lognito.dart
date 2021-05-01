@@ -31,7 +31,7 @@ class Lognito {
   static final List<RepeatingBuffer> _defaultBuffer = <RepeatingBuffer>[
     RepeatingBuffer(_defaultOutputs)
   ];
-  static Lognito _singleton;
+  static Lognito? _singleton;
   final Filter _filter;
   final List<Buffer> _buffers;
   final String _label;
@@ -43,12 +43,12 @@ class Lognito {
   /// defaults: [PrettyPrinter], [DevelopmentFilter] and [ConsoleOutput] will be
   /// used.
   factory Lognito.init({
-    Filter filter,
-    Output output,
-    Buffer buffer,
-    List<Buffer> buffers,
-    Level level,
-    String label,
+    Filter? filter,
+    Output? output,
+    Buffer? buffer,
+    List<Buffer>? buffers,
+    Level? level,
+    String? label,
   }) {
     assert(buffer == null || buffers == null,
         'Use one of parameters, either one buffer, or list of buffers');
@@ -67,58 +67,58 @@ class Lognito {
 
   /// Create new instance of Lognito with custom label and log [Level],
   /// but with same instance of buffer and outputs
-  factory Lognito.withLabel(String label, {Level level}) {
-    return _singleton._copyWithFilterLevelAndLabel(label, level);
+  factory Lognito.withLabel(String label, {Level? level}) {
+    return _singleton!._copyWithFilterLevelAndLabel(label, level);
   }
 
   /// Return singleton instance of [Lognito] create by calling [Lognito.init]
   factory Lognito() {
     assert(_singleton != null, 'You must init Lognito first');
-    return _singleton;
+    return _singleton!;
   }
 
-  Lognito _copyWithFilterLevelAndLabel(String label, Level level) {
+  Lognito _copyWithFilterLevelAndLabel(String label, Level? level) {
     return Lognito._internal(
         this._filter.copyWithLevel(level), _buffers, label);
   }
 
   /// Log a message at level [Level.debug].
-  void d(dynamic message, [dynamic error, StackTrace stackTrace]) {
+  void d(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     log(Level.debug, message, error, stackTrace);
   }
 
   /// Log a message at level [Level.debug].
-  void debug(dynamic message, [dynamic error, StackTrace stackTrace]) {
+  void debug(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     log(Level.debug, message, error, stackTrace);
   }
 
   /// Log a message at level [Level.info].
-  void i(dynamic message, [dynamic error, StackTrace stackTrace]) {
+  void i(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     log(Level.info, message, error, stackTrace);
   }
 
   /// Log a message at level [Level.info].
-  void info(dynamic message, [dynamic error, StackTrace stackTrace]) {
+  void info(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     log(Level.info, message, error, stackTrace);
   }
 
   /// Log a message at level [Level.warning].
-  void w(dynamic message, [dynamic error, StackTrace stackTrace]) {
+  void w(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     log(Level.warning, message, error, stackTrace);
   }
 
   /// Log a message at level [Level.warning].
-  void warning(dynamic message, [dynamic error, StackTrace stackTrace]) {
+  void warning(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     log(Level.warning, message, error, stackTrace);
   }
 
   /// Log a message at level [Level.error].
-  void e(dynamic message, [dynamic error, StackTrace stackTrace]) {
+  void e(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     log(Level.error, message, error, stackTrace);
   }
 
   /// Log a message at level [Level.error].
-  void error(dynamic message, [dynamic error, StackTrace stackTrace]) {
+  void error(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     log(Level.error, message, error, stackTrace);
   }
 
@@ -134,7 +134,7 @@ class Lognito {
 
   /// Log a message with [level].
   void log(Level level, dynamic message,
-      [dynamic error, StackTrace stackTrace]) {
+      [dynamic error, StackTrace? stackTrace]) {
     if (!_active) {
       throw ArgumentError('Logger has already been closed.');
     } else if (error != null && error is StackTrace) {
@@ -149,14 +149,14 @@ class Lognito {
   }
 
   List<Future<void>> flush() {
-    return _buffers?.map((Buffer buffer) => buffer.flush());
+    return _buffers.map((Buffer buffer) => buffer.flush()) as List<Future<void>>;
   }
 
   /// Closes the logger and releases all resources.
   void close() {
     _active = false;
     _filter.dispose();
-    _buffers?.map((Buffer buffer) => buffer.dispose());
+    _buffers.map((Buffer buffer) => buffer.dispose());
   }
 
   bool operator ==(Object object) {

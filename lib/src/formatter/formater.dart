@@ -4,7 +4,7 @@ abstract class Formatter {
   /// Init method, is called when filter is registered in [Lognito] instance
   void init();
 
-  List<String> format(LogEvent event);
+  List<String?> format(LogEvent event);
 
   void dispose();
 }
