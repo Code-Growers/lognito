@@ -1,3 +1,7 @@
+## [0.0.7]
+
+* Upgraded http library
+
 ## [0.0.6]
 
 * Null safety
