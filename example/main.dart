@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lognito/src/buffer/filtered_buffer.dart';
 import 'package:lognito/src/filter/development_filter.dart';
@@ -24,25 +23,25 @@ class Main extends StatelessWidget {
           child: Center(
             child: Column(
               children: <Widget>[
-                OutlineButton(
+                TextButton(
                   onPressed: () {
                     lognito.e('Oh no, something happend');
                   },
                   child: Text('Error log'),
                 ),
-                OutlineButton(
+                TextButton(
                   onPressed: () {
                     lognito.w('I warn you, Lognito is addictive');
                   },
                   child: Text('Warning log'),
                 ),
-                OutlineButton(
+                TextButton(
                   onPressed: () {
                     lognito.i('I am happy to inform Lognito is working');
                   },
                   child: Text('Info log'),
                 ),
-                OutlineButton(
+                TextButton(
                   onPressed: () {
                     lognito.d('This debug will never see light of the console');
                   },
